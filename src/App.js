@@ -37,11 +37,13 @@ class App extends React.Component {
             visible={modalVisible}
             onClose={this.closeModal}
           >
-            <img
-              src={require(`./assets/${modalImage.src}`)}
-              alt={modalImage.firstName}
-              style={{ height: 1000, width: "100%" }}
-            />
+            <div className="modal-image-conatiner">
+              <img
+                src={require(`./assets/${modalImage.src}`)}
+                alt={modalImage.firstName}
+                style={{ height: 1000, width: "100%" }}
+              />
+            </div>
           </Modal>
         )}
         <div className="App">
