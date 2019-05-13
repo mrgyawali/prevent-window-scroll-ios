@@ -1,5 +1,5 @@
-// const CSSTransition = window.ReactTransitionGroup.CSSTransition;
 import * as React from "react";
+import { CSSTransition } from "react-transition-group";
 import "./index.scss";
 
 class Modal extends React.Component {
@@ -8,7 +8,9 @@ class Modal extends React.Component {
     this.currentHeight = 0;
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
+    console.log("next", nextProps);
+    console.log("nextProps.visible", this.props.visible);
     if (!nextProps.visible && this.props.visible) {
       document.body.style.position = "relative";
       document.body.style.top = null;
@@ -19,25 +21,21 @@ class Modal extends React.Component {
     } else if (nextProps.visible && !this.props.visible) {
       this.currentHeight = window.scrollY;
       document.body.style.position = "fixed";
-      // document.body.scrollTo(0, this.currentHeight);
       document.body.style.top = -this.currentHeight + "px";
       document.body.style.bottom = 0;
       document.body.style.left = 0;
       document.body.style.right = 0;
-      // setTimeout(() => {
-      // }, 400)
     }
   }
 
   render() {
-    //   <CSSTransition
-    //     in={this.props.visible}
-    //     timeout={300}
-    //     unmountOnExit
-    //     classNames="modal"
-    //   >
     return (
-      <>
+      <CSSTransition
+        in={this.props.visible}
+        timeout={300}
+        unmountOnExit
+        classNames="modal"
+      >
         {this.props.visible && (
           <div className="modal-container">
             <div className="close-modal-btn" onClick={this.props.onClose}>
@@ -59,7 +57,7 @@ class Modal extends React.Component {
             </div>
           </div>
         )}
-      </>
+      </CSSTransition>
     );
   }
 }

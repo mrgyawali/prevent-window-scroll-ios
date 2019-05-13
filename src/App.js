@@ -1,17 +1,39 @@
 import React from "react";
-import Students from "./studentsList";
+import { highResImages, lowResImages } from "./shoes";
 import Modal from "./components/Modal";
+import * as StackBlur from "stackblur-canvas";
+
 import "./App.scss";
 
 class App extends React.Component {
-  state = {
-    students: Students,
-    modalVisible: false,
-    modalImage: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      highResImages,
+      lowResImages,
+      modalVisible: false,
+      modalImage: null,
+      loading: true
+    };
+    this.targetRef = React.createRef();
+  }
+
+  componentDidMount() {
+    const img = new Image();
+    img.onload = () => {
+      if (this.state.loading) {
+        setInterval(() => {
+          this.setState({
+            loading: false
+          });
+        }, 5000);
+      }
+    };
+    img.src = highResImages.map((highResImg, i) => highResImg.src);
+  }
 
   displayImage = student => {
-    console.log("std displayImage", student);
+    console.log("std displayImage", this.targetRef.current);
     this.setState({
       modalVisible: true,
       modalImage: student
@@ -37,9 +59,9 @@ class App extends React.Component {
             visible={modalVisible}
             onClose={this.closeModal}
           >
-            <div className="modal-image-conatiner">
+            <div ref={this.targetRef} className="modal-image-conatiner">
               <img
-                src={require(`./assets/${modalImage.src}`)}
+                src={require(`./assets/lowRes/${modalImage.src}`)}
                 alt={modalImage.firstName}
                 style={{ height: 1000, width: "100%" }}
               />
@@ -47,15 +69,15 @@ class App extends React.Component {
           </Modal>
         )}
         <div className="App">
-          {students.map((student, sIndex) => (
+          {highResImages.map((highResImg, hIndex) => (
             <div
-              onClick={() => this.displayImage(student)}
-              key={sIndex}
+              onClick={() => this.displayImage(highResImg)}
+              key={hIndex}
               className="image-container"
             >
               <img
-                src={require(`./assets/${student.src}`)}
-                alt={student.firstName}
+                src={require(`./assets/highRes/${highResImg.src}`)}
+                alt={highResImg.name}
                 style={{ height: 100, width: 100 }}
               />
             </div>
